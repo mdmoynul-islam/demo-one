@@ -8,6 +8,15 @@ cd /home/cloudera/cs523/flume/conf
 
 2.	Create a new configuration file named myFlumeFanOutConf.conf:
 nano myFlumeFanOutConf.conf
+mkdir -p /tmp/spooldir
+echo "Sample log entry 1" > /tmp/spooldir/log1.txt
+echo "Sample log entry 2" > /tmp/spooldir/log2.txt
+
+mkdir -p /tmp/checkpoint
+mkdir -p /tmp/filechannel
+
+
+
 3.	  Add the following configuration lines to the file:
 
 agent1.sources = source1
