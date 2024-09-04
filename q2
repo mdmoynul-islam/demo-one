@@ -17,7 +17,7 @@ mkdir -p /tmp/filechannel
 
 
 
-3.	  Add the following configuration lines to the file:
+3.	  Add the following configuration lines to the file "myFlumeFanOutConf.conf":
 
 agent1.sources = source1
 agent1.channels = channel1a channel1b
