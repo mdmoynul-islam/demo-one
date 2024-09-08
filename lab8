@@ -1,0 +1,46 @@
+1. Modify "MyFirstHbaseTable.java" to Create Table and Insert Data
+
+
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.*;
+import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.util.Bytes;
+
+public class MyFirstHbaseTable {
+
+    public static void main(String[] args) throws Exception {
+        // Setup HBase configuration
+        Configuration config = HBaseConfiguration.create();
+        try (Connection connection = ConnectionFactory.createConnection(config);
+             Admin admin = connection.getAdmin()) {
+
+            // Create a table with two column families: 'personal' and 'professional'
+            TableName tableName = TableName.valueOf("employees");
+            if (!admin.tableExists(tableName)) {
+                HTableDescriptor tableDescriptor = new HTableDescriptor(tableName);
+                tableDescriptor.addFamily(new HColumnDescriptor("personal"));
+                tableDescriptor.addFamily(new HColumnDescriptor("professional"));
+                admin.createTable(tableDescriptor);
+                System.out.println("Table created successfully.");
+            }
+
+            // Add data to the table
+            Table table = connection.getTable(tableName);
+            addEmployeeData(table, "1", "John", "Boston", "Manager", "150000");
+            addEmployeeData(table, "2", "Mary", "New York", "Sr. Engineer", "130000");
+            addEmployeeData(table, "3", "Bob", "Fremont", "Jr. Engineer", "90000");
+
+            System.out.println("Data inserted successfully.");
+        }
+    }
+
+    private static void addEmployeeData(Table table, String empid, String name, String city, String designation, String salary) throws Exception {
+        Put put = new Put(Bytes.toBytes(empid));
+        put.addColumn(Bytes.toBytes("personal"), Bytes.toBytes("name"), Bytes.toBytes(name));
+        put.addColumn(Bytes.toBytes("personal"), Bytes.toBytes("city"), Bytes.toBytes(city));
+        put.addColumn(Bytes.toBytes("professional"), Bytes.toBytes("designation"), Bytes.toBytes(designation));
+        put.addColumn(Bytes.toBytes("professional"), Bytes.toBytes("salary"), Bytes.toBytes(salary));
+        table.put(put);
+    }
+}
