@@ -43,4 +43,27 @@ public class MyFirstHbaseTable {
         put.addColumn(Bytes.toBytes("professional"), Bytes.toBytes("salary"), Bytes.toBytes(salary));
         table.put(put);
     }
+
+
+  
+    private static void promoteEmployee(Table table, String empid, String newDesignation, double salaryIncreasePercentage) throws Exception {
+        // Retrieve the current salary
+        Get get = new Get(Bytes.toBytes(empid));
+        Result result = table.get(get);
+        byte[] currentSalaryBytes = result.getValue(Bytes.toBytes("professional"), Bytes.toBytes("salary"));
+        String currentSalaryStr = Bytes.toString(currentSalaryBytes);
+        int currentSalary = Integer.parseInt(currentSalaryStr);
+
+        // Calculate the new salary with the percentage increase
+        int newSalary = (int) (currentSalary * (1 + salaryIncreasePercentage / 100));
+
+        // Update the employee's designation and salary
+        Put promotePut = new Put(Bytes.toBytes(empid));
+        promotePut.addColumn(Bytes.toBytes("professional"), Bytes.toBytes("designation"), Bytes.toBytes(newDesignation));
+        promotePut.addColumn(Bytes.toBytes("professional"), Bytes.toBytes("salary"), Bytes.toBytes(String.valueOf(newSalary)));
+        table.put(promotePut);
+
+        System.out.println("Employee " + empid + " promoted to " + newDesignation + " with a new salary: " + newSalary);
+    }
+
 }
