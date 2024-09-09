@@ -32,6 +32,9 @@ public class MyFirstHbaseTable {
             addEmployeeData(table, "3", "Bob", "Fremont", "Jr. Engineer", "90000");
 
             System.out.println("Data inserted successfully.");
+
+// Promote Bob to Sr. Engineer and increase salary by 5%
+            promoteEmployee(table, "3", "Sr. Engineer", 5.0);
         }
     }
 
